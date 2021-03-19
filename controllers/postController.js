@@ -1,12 +1,20 @@
-const { find } = require('lodash');
 const _ = require('lodash')
-const { uploadImages } = require('../helpers/firebase-upload');
-const { findPostsForGivenUser, findPostsByIds, findSinglePostById } = require('../models/post');
+const { uploadPostImages, getPostImageUrl } = require('../helpers/firebase-upload');
+const { findPostsForGivenUser, findPostsByIds, findSinglePostById, createPost, updatePostById } = require('../models/post');
 
-const createPost = async (req, res) => {
+
+const uploadPost = async (req, res) => {
+    if(!req.payload) return res.status(403).send({ err: 'Token not valid!'});
     const userid = req.payload._id;
     const content = req.body.content;
-    
+    const user = await createPost(userid, content, null);
+    if(!user) return res.status(500).send('Something went wrong with saving post!');
+    const postId = user._id;
+    await uploadPostImages([req.payload.username], [postId]);
+    const imageUrl = (await getPostImageUrl(postId))[0];
+    const updated = await updatePostById(user._id, userid, { imageUrl });
+    if(!updated) return res.status(500).send({ err: 'Something went wrong with saving!'});
+    return res.status(200).send({ msg: 'Post saved succesfully!' });
 }   
 
 const getAllPostsForUser = async (req, res) => {
@@ -51,4 +59,4 @@ const updatePost = async (req, res) => {
 }
 
 
-module.exports = { createPost, getAllPostsForUser, getSinglePost, getMultiplePosts, deletePost, updatePost}
+module.exports = { uploadPost, getAllPostsForUser, getSinglePost, getMultiplePosts, deletePost, updatePost}

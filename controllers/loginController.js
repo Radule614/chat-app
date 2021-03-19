@@ -3,7 +3,7 @@ const { findUserByUsername, setUserActiveTime } = require('../models/user');
 const _ = require('lodash');
 const { verifyPassword } = require('../middleware/hash');
 
-loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
     const user = req.body;
     let result = await findUserByUsername(user);
     

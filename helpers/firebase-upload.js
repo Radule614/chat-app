@@ -12,6 +12,15 @@ const getImageUrl = async (name) => {
     return signedUrls;
 }
 
+const getPostImageUrl = async (name) => {
+    const file = bucket.file(`posts/${name}.png`)
+    const signedUrls = await file.getSignedUrl({
+        action:'read',
+        expires: '03-09-2491'
+    });
+    return signedUrls;
+}
+
 
 const uploadImages = async (names) => {
     for(let name of names) {
@@ -25,10 +34,12 @@ const uploadImages = async (names) => {
     }
 }
 
-const uplaodPostImages = async (names) => {
-    for(let name of names) {
+const uploadPostImages = async (names, uploadNames) => {
+    for(let i = 0; i < names.length; i++) {
+        let name = names[i];
+        let uploadName = uploadNames[i];
         await bucket.upload(path.join(__dirname, `../public/uploads/imgs/${name}.png`), {
-            destination: `profileimgs/${name}.png`,
+            destination: `posts/${uploadName}.png`,
             metadata: {
                 cacheControl: "public,max-age:10,s-maxage:10",
                 contentType: "image/png"
@@ -36,4 +47,4 @@ const uplaodPostImages = async (names) => {
         });
     }
 }
-module.exports = { getImageUrl, uploadImages }
+module.exports = { getImageUrl, uploadImages, uploadPostImages, getPostImageUrl}

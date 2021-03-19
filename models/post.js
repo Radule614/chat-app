@@ -16,7 +16,7 @@ const postSchema = mongoose.Schema({
 
 const postModel = mongoose.model('Post', postSchema);
 
-const createPost = async ({ userid, content, imageUrl }) => {
+const createPost = async (userid, content, imageUrl) => {
     const post = new postModel({ userid, content, imageUrl });
     return await post.save();
 }
@@ -27,7 +27,6 @@ const findSinglePostById = async (_id, userid) => await postModel.findOne({ _id,
 const findPostsByIds = async (postIds, userid) => await postModel.find({_id: { $in: postIds }, userid});
 const deletePostById = async (_id, userid) => await postModel.findOneAndRemove({ _id, userid });
 const updatePostById = async (_id, userid, update) => await postModel.findOneAndUpdate({ _id, userid}, update);
-
 
 
 const numOfLikes = async (post) => {
