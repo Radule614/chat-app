@@ -1,4 +1,5 @@
 const RELEASE = (window.location.href.split('/'))[2] === 'localhost:3000'? false : true;
+console.log(RELEASE);
 console.log((window.location.href.split('/'))[2]);
 
 
@@ -14,5 +15,6 @@ if (RELEASE) {
 } else {
     jsConfig.domainUrl = "http://localhost:3000";
 }
+
 
 
