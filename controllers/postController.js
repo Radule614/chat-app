@@ -10,8 +10,10 @@ const uploadPost = async (req, res) => {
     const user = await createPost(userid, content, null);
     if(!user) return res.status(500).send('Something went wrong with saving post!');
     const postId = user._id;
+    console.log(postId);
     await uploadPostImages([req.payload.username], [postId]);
     const imageUrl = (await getPostImageUrl(postId))[0];
+    console.log(imageUrl);
     const updated = await updatePostById(user._id, userid, { imageUrl });
     if(!updated) return res.status(500).send({ err: 'Something went wrong with saving!'});
     return res.status(200).send({ msg: 'Post saved succesfully!' });

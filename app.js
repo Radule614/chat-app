@@ -32,7 +32,10 @@ mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTop
 });
 //Middlewares
 app.use(compression());
-app.use(logger('dev'));
+if(process.env === 'development') {
+    app.use(logger('dev'));
+}
+
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(cookieParser());

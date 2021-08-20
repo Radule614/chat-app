@@ -1,4 +1,6 @@
-const RELEASE = false;
+const RELEASE = (window.location.href.split('/'))[2] === 'localhost:3000'? false : true;
+console.log((window.location.href.split('/'))[2]);
+
 
 let jsConfig = {
     defaultSection: ["home", "feed"],
@@ -12,3 +14,5 @@ if (RELEASE) {
 } else {
     jsConfig.domainUrl = "http://localhost:3000";
 }
+
+

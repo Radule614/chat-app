@@ -1,9 +1,14 @@
 const path = require('path'); 
 const multer = require('multer'); 
-const { createVerify } = require('crypto');
 
 let storage = multer.diskStorage({ 
-    destination: path.join(__dirname, '../public/uploads/imgs/'),
+    destination: (req, file, cb) => {
+      if(req.originalUrl == '/feed/create') {
+        console.log('hit')
+        return cb(null, path.join(__dirname, '../public/uploads/posts/'));
+      }
+      cb(null, path.join(__dirname, '../public/uploads/imgs/'));
+    } ,
     filename: function (req, file, cb) {
       cb(null, (req.body.username || req.payload.username) + '.png');
     }
